@@ -5,11 +5,11 @@ from pickle import dump, load
 st.image('heart.jpeg')
 st.title('Рассчитайте вероятность риска развития сердечно-сосудистого заболевания')
 st.subheader('Введите данные о вашем образе жизни')
-age = st.slider('Возраст, лет', 0, 100, key='age') 
-height = st.slider('Рост, см', 100, 220, key='height')
-weight = st.slider('Вес, кг', 30, 400, key='weight')
-ap_hi = st.slider('Верхнее давление', 70, 300, key='ap_hi')
-ap_lo = st.slider('Верхнее давление', 20, 180, key='ap_lo')
+age = st.number_input('Возраст, лет', 0, 100, key='age') 
+height = st.number_input('Рост, см', 100, 220, key='height')
+weight = st.number_input('Вес, кг', 30, 400, key='weight')
+ap_hi = st.number_input('Верхнее давление', 70, 300, key='ap_hi')
+ap_lo = st.number_input('Нижнее давление', 20, 180, key='ap_lo')
 gender = st.radio("Выберите ваш пол", options=("М", "Ж"), key='gender')
 gluc = st.radio("Ваш уровень сахара", options=("1", "2", "3"), key='gluc')
 cholesterol = st.radio("Ваш уровень холестерина", options=("1", "2", "3"), key='cholesterol')
@@ -24,16 +24,31 @@ def load():
 model = load()
 
 
-#age *365
-#imt вес//(рост/100)^2.int
-#gender 1 и 2
-#smoke 1 и 0
-#alco 1 и 0
-#active 1 и 0
+age = age * 365
+imt = weight // (height/100)**2
+if gender == 'M':
+    gender = 1
+else:
+    gender = 2
+if smoke == 'Да':
+    smoke = 1
+else: 
+    smoke = 0
+if alco == 'Да':
+    alco = 1
+else:
+    alco = 0
+if active == 'Да':
+    active = 1
+else:
+    active = '0'
 
 if st.button("Рассчитать вероятность"):
-        y_pr = model.predict_proba([[age, imt, ap_hi, ap_lo, gender, gluc, cholesterol, smoke, alco, active]])[:,1]
-    st.success('The output is {}'.format(y_pr))
+    y_pr = model.predict_proba([[age, imt, ap_hi, ap_lo, gender, gluc, cholesterol, smoke, alco, active]])[:,1]
+    st.success('Вероятность риска развития сердечно-сосудистого заболевания составляет {}'.format(y_pr))
+    st.image('output.png')
+    st.subheader('Ваши результаты могут улушиться, если вы обратите внимание на ваше давление, уровень холестерина и индекс массы тела')
+
 
 
 st.markdown("Больше проектов в профиле [GitHub](https://github.com/vadimprimakov)")
