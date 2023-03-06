@@ -1,5 +1,4 @@
 import streamlit as st
-
 import pickle
 from pickle import dump, load
 st.image('heart.jpeg')
@@ -44,11 +43,10 @@ else:
     active = '0'
 
 if st.button("Рассчитать вероятность"):
-    y_pr = model.predict_proba([[age, imt, ap_hi, ap_lo, gender, gluc, cholesterol, smoke, alco, active]])[:,1]
+    y_pr = model.predict_proba([[age, gender, ap_hi, ap_lo, cholesterol, gluc, smoke, alco, active, imt]])[:,1]
     st.success('Вероятность риска развития сердечно-сосудистого заболевания составляет {}'.format(y_pr))
     st.image('output.png')
     st.subheader('Ваши результаты могут улушиться, если вы обратите внимание на ваше давление, уровень холестерина и индекс массы тела')
-
 
 
 st.markdown("Больше проектов в профиле [GitHub](https://github.com/vadimprimakov)")
