@@ -47,9 +47,7 @@ else:
 #df = st.dataframe(data)
 #df_scale = pd.DataFrame(data)
 #numeric = ['age', 'gender', 'ap_hi', 'ap_lo', 'cholesterol', 'gluc', 'smoke', 'alco', 'active', 'imt']
-#scaler = StandardScaler()
-#scaler.fit(df_scale[numeric])
-#df_scale[numeric] = scaler.transform(df_scale[numeric])
+
 
 if st.button("Рассчитать вероятность"):
     y_pr = model.predict_proba([[age, gender, ap_hi, ap_lo, cholesterol, gluc, smoke, alco, active, imt]])[:,1]
