@@ -1,4 +1,6 @@
 import streamlit as st
+import pandas as pd
+from sklearn.preprocessing import StandardScaler
 import pickle
 from pickle import dump, load
 st.image('heart.jpeg')
@@ -25,7 +27,7 @@ model = load()
 
 age = age * 365
 imt = weight // (height/100)**2
-if gender == 'M':
+if gender == "М":
     gender = 1
 else:
     gender = 2
@@ -41,10 +43,19 @@ if active == 'Да':
     active = 1
 else:
     active = '0'
+#data = [{'age': age, 'gender': gender, 'ap_hi': ap_hi, 'ap_lo': ap_lo, 'cholesterol': cholesterol, 'gluc':  gluc, 'smoke': smoke, 'alco': alco, 'active': active, 'imt': imt}]
+#df = st.dataframe(data)
+#df_scale = pd.DataFrame(data)
+#numeric = ['age', 'gender', 'ap_hi', 'ap_lo', 'cholesterol', 'gluc', 'smoke', 'alco', 'active', 'imt']
+#scaler = StandardScaler()
+#scaler.fit(df_scale[numeric])
+#df_scale[numeric] = scaler.transform(df_scale[numeric])
 
 if st.button("Рассчитать вероятность"):
     y_pr = model.predict_proba([[age, gender, ap_hi, ap_lo, cholesterol, gluc, smoke, alco, active, imt]])[:,1]
-    st.success('Вероятность риска развития сердечно-сосудистого заболевания составляет {}'.format(y_pr))
+    #y_pr = model.predict_proba(df_scale)[:,1]
+    y_pr = y_pr[0]
+    st.success(f'Вероятность риска развития сердечно-сосудистого заболевания составляет {y_pr : 0.0%}')
     st.image('output.png')
     st.subheader('Ваши результаты могут улушиться, если вы обратите внимание на ваше давление, уровень холестерина и индекс массы тела')
 
